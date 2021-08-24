@@ -1,0 +1,45 @@
+# singAlphafold
+
+# Default values of arguments
+_FASTA_PATHS=""
+_OUTPUT_DIR=""
+_MODEL_NAMES=model_1,model_2,model_3,model_4,model_5
+_MAX_TEMPLATE=2020-05-14
+
+# Loop through arguments and process them
+for arg in "$@"
+do
+    case $arg in
+        --fasta_paths=*)
+        _FASTA_PATHS="${arg#*=}"
+        shift # Remove --initialize from processing
+        ;;
+        --output_dir=*)
+        _OUTPUT_DIR="${arg#*=}"
+        shift # Remove --cache= from processing
+        ;;
+        --model_names=*)
+        _MODEL_NAMES="${arg#*=}"
+        shift # Remove argument name from processing
+        ;;
+        --max_template_date=*)
+        _MAX_TEMPLATE="${arg#*=}"
+        shift # Remove argument name from processing
+        ;;
+    esac
+done
+
+singularity run -B $ALPHAFOLD_DATA_PATH:/data -B .:/etc --pwd /app/alphafold --nv $CONTAINERDIR/alphafoldamarel_latest.sif \
+    --data_dir=/data \
+    --uniref90_database_path=/data/uniref90/uniref90.fasta \
+    --uniclust30_database_path=/data/uniclust30/uniclust30_2018_08/uniclust30_2018_08 \
+    --mgnify_database_path=/data/mgnify/mgy_clusters_2018_12.fa \
+    --bfd_database_path=/data/bfd/bfd_metaclust_clu_complete_id30_c90_final_seq.sorted_opt  \
+    --pdb70_database_path=/data/pdb70/pdb70 \
+    --template_mmcif_dir=/data/pdb_mmcif/mmcif_files/ \
+    --obsolete_pdbs_path=/data/pdb_mmcif/obsolete.dat \
+    --preset=full_dbs \
+    --fasta_paths=$_FASTA_PATHS \
+    --output_dir=$_OUTPUT_DIR \
+    --model_names=$_MODEL_NAMES \
+    --max_template_date=$_MAX_TEMPLATE
