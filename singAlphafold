@@ -4,7 +4,7 @@
 _FASTA_PATHS=""
 _OUTPUT_DIR=""
 _MODEL_NAMES=model_1,model_2,model_3,model_4,model_5
-_MAX_TEMPLATE=2020-05-14
+_MAX_TEMPLATE=2020-01-01
 
 # Loop through arguments and process them
 for arg in "$@"
