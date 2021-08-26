@@ -8,7 +8,7 @@
 #SBATCH --ntasks=8                   # Total # of tasks across all nodes
 #SBATCH --cpus-per-task=1            # Cores per task (>1 if multithread tasks)
 #SBATCH --gres=gpu:1                 # Number of GPUs
-#SBATCH --mem=0                      # Real memory (RAM) required (MB), 0 is the whole-node memory
+#SBATCH --mem=32000                  # Real memory (RAM) required (MB), 0 is the whole-node memory
 #SBATCH --time=03:00:00              # Total run time limit (HH:MM:SS)
 #SBATCH --output=slurm.%N.%j.out     # STDOUT output file
 #SBATCH --error=slurm.%N.%j.err      # STDERR output file (optional)
