@@ -18,8 +18,8 @@
 # modified Paul Arias
 # 2021-08-16
 
-ARG CUDA=11.2
-FROM nvidia/cuda:11.2.0-base AS build
+ARG CUDA=11.0
+FROM nvidia/cuda:11.0-base AS build
 ARG CUDA
 
 # Use bash to support string substitution.
@@ -28,7 +28,7 @@ SHELL ["/bin/bash", "-c"]
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       build-essential \
       cmake \
-      cuda-command-line-tools-11-2 \
+      cuda-command-line-tools-11-0 \
       git \
       hmmer \
       kalign \
@@ -54,7 +54,7 @@ ENV PATH="/opt/conda/bin:$PATH"
 RUN /opt/conda/bin/conda create -y -p /opt/alphafoldenv -c conda-forge \
       python=3.8 \
       openmm=7.5.1 \
-      cudatoolkit=11.0 \
+      cudatoolkit=11.0.3 \
       pdbfixer \
       pip \
     && /opt/conda/bin/conda clean -ya
@@ -69,22 +69,22 @@ RUN wget -q -P /app/alphafold/alphafold/common/ \
 RUN /opt/alphafoldenv/bin/pip install --upgrade --no-cache-dir pip \
     && sed -i 's/^tensorflow.*$/tensorflow==2.4.1/' /app/alphafold/requirements.txt \
     && /opt/alphafoldenv/bin/pip install --no-cache-dir -r /app/alphafold/requirements.txt \
-    && /opt/alphafoldenv/bin/pip install --upgrade --no-cache-dir jax jaxlib==0.1.69+cuda111 -f \
+    && /opt/alphafoldenv/bin/pip install --upgrade --no-cache-dir jax jaxlib==0.1.69+cuda110 -f \
        https://storage.googleapis.com/jax-releases/jax_releases.html
 
 # Apply OpenMM patch.
 WORKDIR /opt/alphafoldenv/lib/python3.8/site-packages
 RUN patch -p0 < /app/alphafold/docker/openmm.patch
 
-FROM nvidia/cuda:11.2.0-base
+FROM nvidia/cuda:11.0-base
 ARG CUDA
 
 SHELL ["/bin/bash", "-c"]
 
 # add cudnn and cusolver
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      libcudnn8 libcusolver-11-2 \
-      cuda-command-line-tools-11-2 \
+      libcudnn8 libcusolver-11-0 \
+      cuda-command-line-tools-11-0 \
       hmmer \
       kalign \
     && rm -rf /var/lib/apt/lists/*
