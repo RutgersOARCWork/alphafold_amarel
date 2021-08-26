@@ -15,6 +15,7 @@
 #SBATCH --export=ALL                 # Export you current env to the job env
 
 module purge
+module use /projects/community/modulefiles
 module load singularity/3.6.4
 module load alphafold
 
