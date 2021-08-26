@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #SBATCH --partition=gpu              # Partition (job queue)
-#SBATCH --account=general
 #SBATCH --requeue                    # Return job to the queue if preempted
 #SBATCH --job-name=alphafold         # Assign an short name to your job
 #SBATCH --nodes=1                    # Number of nodes you require
